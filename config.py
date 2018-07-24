@@ -67,7 +67,7 @@ class DevelopmentConfig(Config):
     """
 
     #可以通过修改SQLALCHEMY_DATABASE_URI来控制访问不同数据库
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@localhost:3306/yqinfo?charset=utf8'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:New/world123@localhost:3306/yqinfo?charset=utf8'
 
 
 class TestConfig(Config):
