@@ -26,3 +26,5 @@ def create_app(config_name='default'):
     from .main_site import www_site as main_site_blueprint
     app.register_blueprint(main_site_blueprint)
     return app
+
+application = create_app()

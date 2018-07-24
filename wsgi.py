@@ -5,7 +5,7 @@
 # @Site    : 
 # @File    : wsgi.py.py
 # @Software: PyCharm Community Edition
-from app import create_app as application
+from app import application
 
 if __name__ == '__main__':
-    application().run()
+    application.run()
