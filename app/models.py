@@ -67,7 +67,7 @@ class Result(db.Model):
     PR4 = db.Column(db.Integer(), nullable=False)
     PR5 = db.Column(db.Integer(), nullable=False)
     PR6 = db.Column(db.Integer(), nullable=False)
-    PR7 = db.Column(db.Integer(), nullable=False)
+    PR7 = db.Column(db.Float(), nullable=False)
     propose = db.Column(db.Text(), nullable=True, default='')
     CreateTime = db.Column(db.DateTime(), default=datetime.now)
     HashInput = db.Column(db.String(32), nullable=False)

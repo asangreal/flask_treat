@@ -52,7 +52,7 @@ def users(page=1, page_content_number=10):
 @www_site.route('/data/<int:page>', methods=['GET'])
 @www_site.route('/data/<int:page>/<int:page_content_number>')
 def data(page=1, page_content_number=10):
-    content = page_getter(page, page_content_number)
+
     # caculate user records...
     user_records = recodes_getter()
     # caculate pages
