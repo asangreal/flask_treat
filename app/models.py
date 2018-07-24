@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/7/17 下午6:00
 # @Author  : Aries
-# @Site    : 
+# @Site    :
 # @File    : models.py.py
 # @Software: PyCharm Community Edition
 
@@ -80,39 +80,42 @@ def hash_md5(val):
 
 
 if __name__ == '__main__':
-    db.drop_all()
-    db.create_all()
-    id = '330682198907123x'
-    name = '绵绵'
-    ir = hash_md5(name+id)
-    wx = User(wx='dadfa', PhoneNum='13575465942', IDNum=id, Name=name,
-              NickName='活人', Sex='1', Birthday='2018-07-01', Height='170', Weight='50', IncidenceTime='2018-01-01',
-              HashInput=ir)
-    db.session.add_all([wx]),
-    db.session.commit()
+    # db.drop_all()
+    # db.create_all()
+    # id = '330682198907123x'
+    # name = '绵绵'
+    # ir = hash_md5(name+id)
+    # wx = User(wx='dadfa', PhoneNum='13575465942', IDNum=id, Name=name,
+    #           NickName='活人', Sex='1', Birthday='2018-07-01', Height='170', Weight='50', IncidenceTime='2018-01-01',
+    #           HashInput=ir)
+    # db.session.add_all([wx]),
+    # db.session.commit()
+    #
+    # result = Result(
+    # saPASI1 = 1,
+    # saPASI2 = 2,
+    # saPASI3 = 1,
+    # saPASI4 = 1,
+    # saPASI5 = 1,
+    # QualityOfLife = 1,
+    # Arthritis1 = 1,
+    # Arthritis2 = 1,
+    # Arthritis3 = 1,
+    # Arthritis4 = 1,
+    # Arthritis5 = 1,
+    # Arthritis6 = 1,
+    # PR1 = 1,
+    # PR2 = 1,
+    # PR3 = 1,
+    # PR4 = 1,
+    # PR5 = 1,
+    # PR6 = 1,
+    # PR7 = 1,
+    # propose = '',
+    # HashInput=ir)
+    # db.session.add_all([result]),
+    # db.session.commit()
+    # print(result.id)
+    result = User.query.paginate(1, per_page=3, error_out=False)
+    print(result.items)
 
-    result = Result(
-    saPASI1 = 1,
-    saPASI2 = 2,
-    saPASI3 = 1,
-    saPASI4 = 1,
-    saPASI5 = 1,
-    QualityOfLife = 1,
-    Arthritis1 = 1,
-    Arthritis2 = 1,
-    Arthritis3 = 1,
-    Arthritis4 = 1,
-    Arthritis5 = 1,
-    Arthritis6 = 1,
-    PR1 = 1,
-    PR2 = 1,
-    PR3 = 1,
-    PR4 = 1,
-    PR5 = 1,
-    PR6 = 1,
-    PR7 = 1,
-    propose = '',
-    HashInput=ir)
-    db.session.add_all([result]),
-    db.session.commit()
-    print(result.id)

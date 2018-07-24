@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+    {% block content %}
+    <div class="container" style="margin-bottom:10px">
+        <form id="search-form" class="form-inline pull-right" onsubmit="searchTask();return false;" autocomplete="off">
+            <input type="hidden" name="search_type" value="-1" />
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-text"  data-toggle="dropdown">搜索类型</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" data-field="search_type">
+                    <li value="22"><a href="javascript:;">姓名</a></li>
+                    <li value="21"><a href="javascript:;">身份证</a></li>
+                </ul>
+		    </div>
+            <div class="input-group">
+                <input type="text" maxlength="20" class="form-control" style="width:150px;" name="keywords" id="keywords" value="" />
+                <a href="javascript:;" class="input-group-addon" onclick="submit_form()"><span class="glyphicon glyphicon-search" ></span></a>
+            </div>
+        </form>
+    </div>
+        <div class="container">
+            <table class="table table-striped table-bordered table-hover table-condensed">
+                <thead>
+            <th>姓名</th><th>身份证</th><th>发病时间</th><th>面积</th><th>红斑</th>
+            <th>鳞屑</th><th>厚度</th><th>总分</th><th>生活质量</th><th>关节炎1</th>
+            <th>关节炎2</th><th>关节炎3</th><th>关节炎4</th><th>关节炎5</th><th>关节炎总分</th><th>教育程度</th>
+            <th>甲凹点</th><th>严重程度</th><th>维甲酸使用</th><th>色素膜炎</th><th>BMI</th><th>风险指数</th>
+            <th>填写时间</th>
+
+                </thead>
+                <!--<td style="white-space: nowrap;">司马琼瑶</td><td>330622138407213321</td><td style="white-space: nowrap;">2018-07</td>-->
+              {% for content in user_contents.items %}
+              <tr>
+                  <td style="white-space: nowrap;">{{content.Name}}</td>
+                  <td style="white-space: nowrap;">{{content.IDNum}}</td>
+                  <td style="white-space: nowrap;">{{content.IncidenceTime}}</td>
+                  <td>{{content.saPASI1}}</td>
+                  <td>{{content.saPASI2}}</td>
+                  <td>{{content.saPASI3}}</td>
+                  <td>{{content.saPASI4}}</td>
+                  <td>{{content.saPASI5}}</td>
+                  <td>{{content.QualityOfLife}}</td>
+                  <td>{{content.Arthritis1}}</td>
+                  <td>{{content.Arthritis2}}</td>
+                  <td>{{content.Arthritis3}}</td>
+                  <td>{{content.Arthritis4}}</td>
+                  <td>{{content.Arthritis5}}</td>
+                  <td>{{content.Arthritis6}}</td>
+                  <td>{{content.PR1}}</td>
+                  <td>{{content.PR2}}</td>
+                  <td>{{content.PR3}}</td>
+                  <td>{{content.PR4}}</td>
+                  <td>{{content.PR5}}</td>
+                  <td>{{content.PR6}}</td>
+                  <td>{{content.PR7}}</td>
+                  <td>{{content.CreateTime}}</td>
+
+              </tr>
+              {% endfor %}
+            </table>
+        </div>
+    <div class="container">
+        <H1></H1>
+        <ul class="pagination pull-right">
+            <li class="disable"><a><b>{{user_records}}</b>&nbsp;条记录</a></li>
+
+            {% if current_page_number == 1 %}
+                <li class="disabled"><a href="#">&laquo;</a></li>
+            {% else %}
+                <li><a href="/data/{{ current_page_number - 1 }}">&laquo;</a></li>
+            {% endif %}
+
+            {% for content in page_li %}
+                {% if content == current_page_number %}
+                    <li class="active"><a href="#">{{content}}</a></li>
+                {% else %}
+                    <li><a href="/data/{{content}}">{{content}}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if current_page_number == end_page %}
+                <li class="disabled"><a href="#">&raquo;</a></li>
+            {% else %}
+                <li><a href="/data/{{ current_page_number + 1 }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </div>
+          <script type="text/javascript">
+    var form=$('#search-form')[0];
+
+    $('#search-form>.btn-group>.dropdown-menu').click(function(e){
+        var $li=$(e.target).closest('li');
+            if($li.size()>0) {
+                var field = $(this).attr('data-field');
+                form[field].value = $li.attr('value');
+                $(this).prev().prev().html($li.find('a').html());
+            }
+    });
+    </script>
+    {{super()}}
+    {% endblock content %}

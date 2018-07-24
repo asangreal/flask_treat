@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+    {% block content %}
+    <div class="container" style="margin-bottom:10px">
+        <form id="search-form" class="form-inline pull-right" action="/search" method="post"
+              onsubmit="searchTask();return false;" autocomplete="off">
+            <input type="hidden" name="search_type" value="-1" />
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-text"  data-toggle="dropdown">搜索类型</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" data-field="search_type">
+                    <li value="12" onclick="dropdown_form()"><a href="javascript:;">姓名</a></li>
+                    <li value="11" onclick="dropdown_form()"><a href="javascript:;">身份证</a></li>
+                </ul>
+		    </div>
+            <div class="input-group">
+                <input type="text" maxlength="20" class="form-control" style="width:150px;" name="keywords" id="keywords" value="" />
+                <a href="javascript:;" class="input-group-addon" onclick="submit_form()"><span class="glyphicon glyphicon-search" ></span></a>
+            </div>
+        </form>
+    </div>
+        <div class="container">
+            <table class="table table-striped table-bordered table-hover table-condensed">
+                <thead>
+            <th>微信号</th><th>手机号</th><th>身份证</th><th>姓名</th><th>昵称</th><th>性别</th>
+            <th>生日</th><th>身高</th><th>体重</th><th>发病时间</th><th>详情</th></thead>
+              {% for content in user_contents.items %}
+              <tr>
+                  <td>{{content.wx}}</td>
+                  <td>{{content.PhoneNum}}</td>
+                  <td>{{content.IDNum}}</td>
+                  <td>{{content.Name}}</td>
+                  <td>{{content.NickName}}</td>
+                  <td>{{content.Sex}}</td>
+                  <td>{{content.Birthday}}</td>
+                  <td>{{content.Height}}</td>
+                  <td>{{content.Weight}}</td>
+                  <td>{{content.IncidenceTime}}</td>
+                  <td><a href="/result/{{content.wx}}/{{content.IDNum}}">详情</a></td>
+              </tr>
+              {% endfor %}
+            </table>
+        </div>
+    <div class="container">
+        <H1></H1>
+        <ul class="pagination pull-right">
+            <li class="disable"><a><b>{{user_records}}</b>&nbsp;条记录</a></li>
+
+            {% if current_page_number == 1 %}
+                <li class="disabled"><a href="#">&laquo;</a></li>
+            {% else %}
+                <li><a href="/user/{{ current_page_number - 1 }}">&laquo;</a></li>
+            {% endif %}
+
+            {% for content in page_li %}
+                {% if content == current_page_number %}
+                    <li class="active"><a href="#">{{content}}</a></li>
+                {% else %}
+                    <li><a href="/user/{{content}}">{{content}}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if current_page_number == end_page %}
+                <li class="disabled"><a href="#">&raquo;</a></li>
+            {% else %}
+                <li><a href="/user/{{ current_page_number + 1 }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    <script type="text/javascript">
+    function dropdown_form(){
+        var form=$('#search-form')[0];
+
+        $('#search-form>.btn-group>.dropdown-menu').click(function(e){
+            var $li=$(e.target).closest('li');
+                if($li.size()>0) {
+                    var field = $(this).attr('data-field');
+                    form[field].value = $li.attr('value');
+                    $(this).prev().prev().html($li.find('a').html());
+                }
+        });
+    }
+    </script>
+    {{super()}}
+    {% endblock content %}

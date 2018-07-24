@@ -257,11 +257,23 @@ def check_user_is_in(HashInput):
     return User.query.filter_by(HashInput=HashInput).all()
 
 
-def page_getter(hash_input, page, result_query=True):
-    if result_query:
-        pagination = Result.query.filter_by(HashInput=hash_input).order_by(Result.CreateTime.desc()).paginate(
-            int(page), per_page=3, error_out=False)
-    else:
-        pagination = User.query.filter_by(HashInput=hash_input).order_by(Result.CreateTime.desc()).paginate(
-            int(page), per_page=3, error_out=False)
+def result_page_getter_fiter(page, page_content_number, hash_input=None, result_query=True):
+    pagination = Result.query.filter_by(HashInput=hash_input).order_by(Result.CreateTime.desc()).paginate(
+        int(page), page_content_number, error_out=False)
     return pagination
+
+def page_getter(page, page_content_number, hash_input=None, result_query=True):
+    if result_query:
+        pagination = Result.query.order_by(Result.CreateTime.desc()).paginate(
+            int(page), page_content_number, error_out=False)
+    else:
+        pagination = User.query.paginate(page, page_content_number, error_out=False)
+    return pagination
+
+
+def recodes_getter(result_query=True):
+    if result_query:
+        num = Result.query.count()
+    else:
+        num = User.query.count()
+    return num

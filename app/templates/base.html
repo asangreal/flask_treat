@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>用户统计</title>
+
+    <!-- Bootstrap -->
+    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+      <style>
+          .table th, .table td {
+                text-align: center;
+                vertical-align: middle!important;
+                }
+      </style>
+
+  </head>
+  <body style="margin-top:60px">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+
+    {% block navbar %}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">数据统计</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            {% if flag == 1 %}
+              <li class="active"><a href="#">人员统计</a></li>
+              <li><a href="#">结果统计</a></li>
+            {% else %}
+              <li><a href="#">人员统计</a></li>
+              <li class="active"><a href="#">结果统计</a></li>
+            {% endif %}
+            <!--
+              <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>-->
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    {% endblock navbar %}
+    {% block content %}
+
+  <!-- 底部begin -->
+    <hr>
+    <footer>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-offset-4 col-md-8">
+               <ul class="nav navbar-nav">
+                  <li class="active"><a href="#">关于我们</a></li>
+                  <li ><a href="#">联系我们</a></li>
+                  <li><a href="#">广告服务</a></li>
+                  <li><a href="#">免责声明</a></li>
+                   <li><a href="#">ICP备案信息</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </footer>
+    <!-- 底部end -->
+    <script>
+        function submit_form() {
+        var first = $("input[name='search_type']").val();
+
+        if (first == "" || first == null || first == undefined) {
+            alert("输入不能为空");
+            return false;/*阻止表单提交*/
+        } else if (first == "-1") {
+          alert("请选择搜索类型")
+        } else{
+            $("#Form").submit();
+        }
+
+    }
+
+</script>
+    {% endblock content %}
+  </body>
+</html>
