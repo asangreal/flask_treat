@@ -194,7 +194,7 @@ class CaculateRisk(object):
     def caculate(self):
         self.user_insert()
         message = list(set(self.message))
-        return self.sapasi5, self.arthritis6, self.risk7, message
+        return self.sapasi5, self.arthritis6, self.risk7, ';'.join(message)
 
     def user_insert(self):
         user_md5 = hash_md5(self.name + self.id_num)
