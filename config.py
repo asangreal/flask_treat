@@ -75,14 +75,14 @@ class TestConfig(Config):
     """
 
     #可以通过修改SQLALCHEMY_DATABASE_URI来控制访问不同数据库
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@127.0.0.1:3165/yqinfo?charset=utf8'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@127.0.0.1:3306/yqinfo?charset=utf8'
 
 
 class ProductionConfig(Config):
     """生产环境
     """
     #可以通过修改SQLALCHEMY_DATABASE_URI来控制访问不同数据库
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@127.0.0.1:3165/yqinfo?charset=utf8'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@127.0.0.1:3306/yqinfo?charset=utf8'
 
 
 # 设置配置映射
