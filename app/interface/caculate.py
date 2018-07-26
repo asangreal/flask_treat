@@ -132,7 +132,10 @@ class CaculateRisk(object):
 
     @property
     def risk1(self):
-        if not self.request_json['PR1']:
+        if self.risk4 == '' or self.risk5 == '' or self.risk2 == '':
+            return ''
+
+        if self.request_json['PR1'] == '':
             return ''
         val = int(self.request_json['PR1'])
         if val > 3:
@@ -144,12 +147,15 @@ class CaculateRisk(object):
 
     @property
     def risk2(self):
-        if not self.request_json['PR2']:
+        if self.request_json['PR2'] == '':
             return ''
         return int(self.request_json['PR2']) * 2.51
 
     @property
     def risk3(self):
+        if self.risk4 == '' or self.risk5 == '' or self.risk2 == '':
+            return ''
+
         if self.sapasi5 > 20:
             risk = 5.39
         elif self.sapasi5 < 10:
@@ -160,18 +166,20 @@ class CaculateRisk(object):
 
     @property
     def risk4(self):
-        if not self.request_json['PR4']:
+        if self.request_json['PR4'] == '':
             return ''
         return int(self.request_json['PR4']) * 3.42
 
     @property
     def risk5(self):
-        if not self.request_json['PR5']:
+        if self.request_json['PR5'] == '':
             return ''
         return int(self.request_json['PR5']) * 31.5
 
     @property
     def risk6(self):
+        if self.risk4 == '' or self.risk5 == '' or self.risk2 == '':
+            return ''
         percent = float(self.weight) * 10000 / (float(self.height) * float(self.height))
         if percent > 27:
             # 肥胖
