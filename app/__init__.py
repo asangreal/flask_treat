@@ -12,7 +12,7 @@ from config import config
 db = SQLAlchemy()
 
 
-def create_app(config_name='default'):
+def create_app(config_name='production'):
     # __name__ 决定应用根目录
     app = Flask(__name__)
     # 初始化app配置

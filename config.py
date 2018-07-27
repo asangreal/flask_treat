@@ -46,7 +46,7 @@ class Config:
     FLATPAGES_AUTO_RELOAD = True
     FLATPAGES_EXTENSION = '.md'
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'can you guess it'
-    DEBUG = True
+
     # sqlalchemy两个主要配置
     # ORM底层所访问数据库URI
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@127.0.0.1:3165/yqinfo?charset=utf8'
@@ -65,6 +65,7 @@ class Config:
 class DevelopmentConfig(Config):
     """开发环境配置
     """
+    DEBUG = True
 
     #可以通过修改SQLALCHEMY_DATABASE_URI来控制访问不同数据库
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:New/world123@localhost:3306/yqinfo?charset=utf8'
@@ -73,7 +74,7 @@ class DevelopmentConfig(Config):
 class TestConfig(Config):
     """测试环境配置
     """
-
+    DEBUG = True
     #可以通过修改SQLALCHEMY_DATABASE_URI来控制访问不同数据库
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@127.0.0.1:3306/yqinfo?charset=utf8'
 
@@ -81,6 +82,7 @@ class TestConfig(Config):
 class ProductionConfig(Config):
     """生产环境
     """
+    DEBUG = False
     #可以通过修改SQLALCHEMY_DATABASE_URI来控制访问不同数据库
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@127.0.0.1:3306/yqinfo?charset=utf8'
 
