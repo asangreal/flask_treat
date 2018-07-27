@@ -1,1 +1,1 @@
-hup uwsgi --ini flask_treat.ini >>uwsgi.log 2>&1 &
+nohup uwsgi --ini flask_treat.ini >>uwsgi.log 2>&1 &
