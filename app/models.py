@@ -31,7 +31,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     wx = db.Column(db.String(20), nullable=False)
     PhoneNum = db.Column(db.String(11), nullable=False)
-    IDNum = db.Column(db.String(18), nullable=False, unique=True)
+    IDNum = db.Column(db.String(18), nullable=False)
     Name = db.Column(db.String(30), nullable=False)
     NickName = db.Column(db.String(30), default='')
     Sex = db.Column(db.String(2), nullable=False)
