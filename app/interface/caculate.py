@@ -207,7 +207,6 @@ class CaculateRisk(object):
     def user_insert(self):
         user_md5 = hash_md5(self.name + self.id_num)
         res = self.check_user_is_in(user_md5)
-        print(res)
         if not res:
             user_info = User(
                 wx=self.wx_name,
@@ -270,6 +269,7 @@ def result_page_getter_fiter(page, page_content_number, hash_input=None, result_
         int(page), page_content_number, error_out=False)
     return pagination
 
+
 def page_getter(page, page_content_number, hash_input=None, result_query=True):
     if result_query:
         pagination = Result.query.order_by(Result.CreateTime.desc()).paginate(
@@ -285,3 +285,14 @@ def recodes_getter(result_query=True):
     else:
         num = User.query.count()
     return num
+
+
+def page_searcher(page, page_content_number, keyword, result_query=True):
+    search_query = '%{0}%'.format(keyword)
+    pagination = User.query(User.Name, User.IDNum).\
+        filter_by(User.Name.like(search_query), User.IDNum.like(search_query)).\
+        order_by(Result.CreateTime.desc()).paginate(
+        int(page), page_content_number, error_out=False)
+    print(pagination)
+    if result_query:
+        pagination = Result.query.filter_by()

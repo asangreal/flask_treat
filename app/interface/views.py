@@ -46,7 +46,7 @@ def get_history():
         name = content['Name']
         page = int(content['Page'])
         hash_input = hash_md5(name+ID_num)
-        pagination = result_page_getter_fiter(page, page_content_number=10, hash_input=hash_input)
+        pagination = result_page_getter_fiter(page, page_content_number=8, hash_input=hash_input)
         page_val = []
         for page_content in pagination.items:
             page_val.append({

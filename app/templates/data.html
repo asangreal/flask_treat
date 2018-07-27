@@ -1,24 +1,5 @@
 {% extends "base.html" %}
     {% block content %}
-    <div class="container" style="margin-bottom:10px">
-        <form id="search-form" class="form-inline pull-right" onsubmit="searchTask();return false;" autocomplete="off">
-            <input type="hidden" name="search_type" value="-1" />
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-text"  data-toggle="dropdown">搜索类型</button>
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" data-field="search_type">
-                    <li value="22"><a href="javascript:;">姓名</a></li>
-                    <li value="21"><a href="javascript:;">身份证</a></li>
-                </ul>
-		    </div>
-            <div class="input-group">
-                <input type="text" maxlength="20" class="form-control" style="width:150px;" name="keywords" id="keywords" value="" />
-                <a href="javascript:;" class="input-group-addon" onclick="submit_form()"><span class="glyphicon glyphicon-search" ></span></a>
-            </div>
-        </form>
-    </div>
         <div class="container">
             <table class="table table-striped table-bordered table-hover table-condensed">
                 <thead>
@@ -61,7 +42,6 @@
             </table>
         </div>
     <div class="container">
-        <H1></H1>
         <ul class="pagination pull-right">
             <li class="disable"><a><b>{{user_records}}</b>&nbsp;条记录</a></li>
 
@@ -85,18 +65,5 @@
                 <li><a href="/data/{{ current_page_number + 1 }}">&raquo;</a></li>
             {% endif %}
         </ul>
-    </div>
-          <script type="text/javascript">
-    var form=$('#search-form')[0];
-
-    $('#search-form>.btn-group>.dropdown-menu').click(function(e){
-        var $li=$(e.target).closest('li');
-            if($li.size()>0) {
-                var field = $(this).attr('data-field');
-                form[field].value = $li.attr('value');
-                $(this).prev().prev().html($li.find('a').html());
-            }
-    });
-    </script>
     {{super()}}
     {% endblock content %}

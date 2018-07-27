@@ -1,6 +1,6 @@
 {% extends "base.html" %}
     {% block content %}
-    <div class="container" style="margin-bottom:10px">
+   <div class="container" style="margin-bottom:10px">
         <form id="search-form" class="form-inline pull-right" action="/search/user" method="post" autocomplete="off">
             <input type="hidden" name="search_type" value="-1" />
             <div class="input-group">
@@ -39,21 +39,21 @@
             {% if current_page_number == 1 %}
                 <li class="disabled"><a href="#">&laquo;</a></li>
             {% else %}
-                <li><a href="/user/{{ current_page_number - 1 }}">&laquo;</a></li>
+                <li><a href="/search/user/{{ current_page_number - 1 }}/{{keywords}}">&laquo;</a></li>
             {% endif %}
 
             {% for content in page_li %}
                 {% if content == current_page_number %}
                     <li class="active"><a href="#">{{content}}</a></li>
                 {% else %}
-                    <li><a href="/user/{{content}}">{{content}}</a></li>
+                    <li><a href="/search/user/{{content}}/{{keywords}}">{{content}}</a></li>
                 {% endif %}
             {% endfor %}
 
             {% if current_page_number == end_page %}
                 <li class="disabled"><a href="#">&raquo;</a></li>
             {% else %}
-                <li><a href="/user/{{ current_page_number + 1 }}">&raquo;</a></li>
+                <li><a href="/search/user/{{ current_page_number + 1 }}/{{keywords}}">&raquo;</a></li>
             {% endif %}
         </ul>
     </div>

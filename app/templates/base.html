@@ -46,11 +46,11 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             {% if flag == 1 %}
-              <li class="active"><a href="#">人员统计</a></li>
-              <li><a href="#">结果统计</a></li>
+              <li class="active"><a href="/user">人员统计</a></li>
+              <li><a href="/data">结果统计</a></li>
             {% else %}
-              <li><a href="#">人员统计</a></li>
-              <li class="active"><a href="#">结果统计</a></li>
+              <li><a href="/user">人员统计</a></li>
+              <li class="active"><a href="/data">结果统计</a></li>
             {% endif %}
             <!--
               <li><a href="#about">About</a></li>
@@ -82,15 +82,13 @@
     <!-- 底部end -->
     <script>
         function submit_form() {
-        var first = $("input[name='search_type']").val();
-
-        if (first == "" || first == null || first == undefined) {
+        var first = $("input[name='keywords']").val();
+        console.log(first)
+        if (first == "" || first == null || first == undefined || first == "-1") {
             alert("输入不能为空");
             return false;/*阻止表单提交*/
-        } else if (first == "-1") {
-          alert("请选择搜索类型")
         } else{
-            $("#Form").submit();
+            $("#search-form").submit();
         }
 
     }
