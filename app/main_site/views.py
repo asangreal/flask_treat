@@ -108,7 +108,7 @@ def search(page=1, page_content_number=10, keywords=None):
         ret = db.session.query(User).filter(User.Name.ilike(search_key_words))
         user_records = db.session.query(User).filter(User.Name.ilike(search_key_words)).count()
 
-    value = ret.order_by(Result.CreateTime.desc()).paginate(page, page_content_number, error_out=False)
+    value = ret.paginate(page, page_content_number, error_out=False)
     all_page_num = int(ceil(user_records / page_content_number))
     page_li = []
 
