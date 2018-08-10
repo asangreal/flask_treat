@@ -8,6 +8,7 @@
 from hashlib import md5
 from app.models import User, Result
 from app import db
+from app.interface.advice import Advices
 
 
 class CaculateRisk(object):
@@ -21,7 +22,7 @@ class CaculateRisk(object):
         self.request_json = request_json
         self.user = User()
         self.result = Result()
-        self.message = []
+        self.advice = Advices()
 
     @property
     def wx_name(self):
@@ -88,17 +89,18 @@ class CaculateRisk(object):
     @property
     def sapasi5(self):
         score = self.sapasi1 * (self.sapasi2 + self.sapasi3 + self.sapasi4)
-        if score > 9:
-            self.message.append(self.risk_message1)
-        else:
-            self.message.append(self.risk_message2)
+        self.advice.qol_sapasi_message(self.quilityoflife, score)
+        # if score > 9:
+        #     self.message.append(self.risk_message1)
+        # else:
+        #     self.message.append(self.risk_message2)
         return score
 
     @property
     def quilityoflife(self):
         score = self.request_json['QualityOfLife']
-        if int(score) > 1:
-            self.message.append(self.risk_message3)
+        # if int(score) > 1:
+        #     self.message.append(self.risk_message3)
         return score
 
     @property
@@ -124,10 +126,7 @@ class CaculateRisk(object):
     @property
     def arthritis6(self):
         score = self.arthritis1 + self.arthritis2 + self.arthritis3 + self.arthritis4 + self.arthritis5
-        if score > 1:
-            self.message.append(self.risk_message1)
-        else:
-            self.message.append(self.risk_message2)
+        self.advice.pest_message(score)
         return score
 
     @property
@@ -193,15 +192,14 @@ class CaculateRisk(object):
     def risk7(self):
         if self.risk4 != '' and self.risk5 != '' and self.risk2 != '':
             risk = self.risk1 + self.risk2 + self.risk3 + self.risk4 + self.risk5 + self.risk6
-            if risk > 40:
-                self.message.append(self.risk_message4)
+            self.advice.pas_message(risk)
             return risk
         else:
             return ''
 
     def caculate(self):
         self.user_insert()
-        message = list(set(self.message))
+        message = list(set(self.advice.message))
         return self.sapasi5, self.arthritis6, self.risk7, ';'.join(message)
 
     def user_insert(self):
@@ -247,7 +245,7 @@ class CaculateRisk(object):
             PR5=self.risk5,
             PR6=self.risk6,
             PR7=self.risk7,
-            propose=';'.join(list(set(self.message)))
+            propose=';'.join(list(set(self.advice.message)))
         )
         db.session.add_all([result])
         db.session.commit()
