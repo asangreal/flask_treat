@@ -13,10 +13,10 @@ from app.interface.advice import Advices
 
 class CaculateRisk(object):
 
-    risk_message1 = '建议就近就诊'
-    risk_message2 = '建议外用治疗，并且持续观察'
-    risk_message3 = '建议心理干预，可通过微信等移动网络方式'
-    risk_message4 = '建议干预风险因素，精准患教'
+    # risk_message1 = '建议就近就诊'
+    # risk_message2 = '建议外用治疗，并且持续观察'
+    # risk_message3 = '建议心理干预，可通过微信等移动网络方式'
+    # risk_message4 = '建议干预风险因素，精准患教'
 
     def __init__(self, request_json):
         self.request_json = request_json
@@ -192,6 +192,7 @@ class CaculateRisk(object):
     def risk7(self):
         if self.risk4 != '' and self.risk5 != '' and self.risk2 != '':
             risk = self.risk1 + self.risk2 + self.risk3 + self.risk4 + self.risk5 + self.risk6
+            risk = round(risk, 2)
             self.advice.pas_message(risk)
             return risk
         else:
@@ -291,6 +292,5 @@ def page_searcher(page, page_content_number, keyword, result_query=True):
         filter_by(User.Name.like(search_query), User.IDNum.like(search_query)).\
         order_by(Result.CreateTime.desc()).paginate(
         int(page), page_content_number, error_out=False)
-    print(pagination)
     if result_query:
         pagination = Result.query.filter_by()

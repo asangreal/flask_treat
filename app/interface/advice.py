@@ -24,7 +24,7 @@ class Advices(object):
             message = message + "重度。"
         else:
             message = ""
-        self.message.append(message)
+        self.append_message(message)
 
     def qol_message(self, qol_score):
         message = "您的病情对您%s影响。"
@@ -40,7 +40,7 @@ class Advices(object):
             message = message % '极度严重'
         else:
             message = ''
-        self.message.append(message)
+        self.append_message(message)
 
     def qol_sapasi_message(self, qol_score, spasi_score):
         qsm = SapasiQolMessage()
@@ -55,7 +55,7 @@ class Advices(object):
             message = '您目前患银屑病性关节炎的可能性较大，建议您找专业医生进行诊治。'
         else:
             message = ''
-        self.message.append(message)
+        self.append_message(message)
 
     def pas_message(self, pas_score):
         if 0 < pas_score < 1:
@@ -64,7 +64,11 @@ class Advices(object):
             message = "您未来患银屑病性关节炎的风险是常人的%s倍。请注意对风险因素的防控。" % str(pas_score)
         else:
             message = ''
-        self.message.append(message)
+        self.append_message(message)
+
+    def append_message(self, message):
+        if message:
+            self.message.append(message)
 
 
 class SapasiQolMessage(object):
@@ -83,7 +87,11 @@ class SapasiQolMessage(object):
             message = "建议您十分积极的治疗疾病。"
         else:
             message = ""
-        self.message.append(message)
+        self.append_message(message)
+
+    def append_message(self, message):
+        if message:
+            self.message.append(message)
 
     def qol_1(self, sapai_score):
         if sapai_score == 0:
@@ -96,7 +104,7 @@ class SapasiQolMessage(object):
             message = "建议您十分积极的治疗疾病。"
         else:
             message = ""
-        self.message.append(message)
+        self.append_message(message)
 
     def qol_2(self, sapai_score):
         if sapai_score == 0:
@@ -109,7 +117,7 @@ class SapasiQolMessage(object):
             message = "您需要十分积极的治疗疾病。也需要注意一下疾病对您心理造成的负担。"
         else:
             message = ""
-        self.message.append(message)
+        self.append_message(message)
 
     def qol_3(self, sapai_score):
         if sapai_score == 0:
@@ -122,7 +130,7 @@ class SapasiQolMessage(object):
             message = "您需要十分积极的治疗疾病。同时可以找医生谈一下疾病对您的心理影响。"
         else:
             message = ""
-        self.message.append(message)
+        self.append_message(message)
 
     def qol_4(self, sapai_score):
         if sapai_score == 0:
@@ -135,7 +143,7 @@ class SapasiQolMessage(object):
             message = "您需要十分积极的治疗疾病。您可能还需要心理/精神专业医师的帮助。"
         else:
             message = ""
-        self.message.append(message)
+        self.append_message(message)
 
     def qol_not_match(self, sapai_score=0):
         pass
