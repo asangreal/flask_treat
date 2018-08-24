@@ -7,9 +7,15 @@
 # @Software: PyCharm Community Edition
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from config import config
 
 db = SQLAlchemy()
+login_manager = LoginManager()
+# 会话保护等级
+login_manager.session_protection = 'strong'
+# 设置登录页面端点
+login_manager.login_view = 'main.login_in'
 
 
 def create_app(config_name='production'):

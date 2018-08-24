@@ -11,9 +11,9 @@ from flask import current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from datetime import datetime
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from hashlib import md5
+from flask_login import UserMixin
+
 # app = Flask(__name__)
 # app.config['SECRET_KEY'] = 'hard to guess'
 # # 这里登陆的是root用户，要填上自己的密码，MySQL的默认端口是3306，填上之前创建的数据库名jianshu,连接方式参考 \
@@ -25,9 +25,58 @@ from hashlib import md5
 # db = SQLAlchemy(app)
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
 
     __tablename__ = 'user'
+    user_id = db.Column(db.String(20), primary_key=True)
+    user_name = db.Column(db.String(30), unique=True)
+    nickname = db.Column(db.String(40), unique=True)
+    sex = db.Column(db.String(4))
+    age = db.Column(db.Integer)
+    password_hash = db.Column(db.String(128))
+    email = db.Column(db.String(50), unique=True)
+    last_login_tm = db.Column(db.DateTime)
+    user_crt_dt = db.Column(db.DateTime)
+    attention_cnt = db.Column(db.Integer, default=0)
+
+    def __repr__(self):
+        return '<{},{},{}>'.format(self.user_name, self.email, self.user_id)
+
+    # 增加密码属性
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    # 设置密码
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    # 校验密码
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def get_id(self):
+        return self.user_id
+
+    def generate_auth_token(self, expiration=3600):
+        #生成令牌字符串token
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'user_id': self.user_id}).decode("utf-8")
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except Exception:
+            return None  # valid token, but expired
+        return User.query.get(data['user_id'])
+
+
+class Participator(db.Model):
+
+    __tablename__ = 'participator'
     user_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     wx = db.Column(db.String(20), nullable=False)
     PhoneNum = db.Column(db.String(11), nullable=False)
@@ -36,8 +85,6 @@ class User(db.Model):
     NickName = db.Column(db.String(30), default='')
     Sex = db.Column(db.String(2), nullable=False)
     Birthday = db.Column(db.Date(), nullable=False)
-    Height = db.Column(db.String(12), nullable=False)
-    Weight = db.Column(db.String(12), nullable=False)
     IncidenceTime = db.Column(db.String(10), nullable=False)
     HashInput = db.Column(db.String(32), nullable=False)
 
@@ -49,6 +96,8 @@ class Result(db.Model):
 
     __tablename_ = 'result'
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    Height = db.Column(db.String(12), nullable=False)
+    Weight = db.Column(db.String(12), nullable=False)
     saPASI1 = db.Column(db.Integer(), nullable=False)
     saPASI2 = db.Column(db.Integer(), nullable=False)
     saPASI3 = db.Column(db.Integer(), nullable=False)
@@ -74,6 +123,7 @@ class Result(db.Model):
 
     def __repr__(self):
         return "<name %s>" % self.CreateTime
+
 
 def hash_md5(val):
     return md5(val.encode('utf-8')).hexdigest()

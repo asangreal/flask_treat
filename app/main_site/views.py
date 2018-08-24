@@ -69,7 +69,7 @@ def data(page=1, page_content_number=10):
 
     page_li.append(page)
     page_li.sort()
-    ret = db.session.query(Result.saPASI1, Result.saPASI2, Result.saPASI3, Result.saPASI4, Result.saPASI5,
+    ret = db.session.query(Result.Height, Result.Weight, Result.saPASI1, Result.saPASI2, Result.saPASI3, Result.saPASI4, Result.saPASI5,
                            Result.QualityOfLife, Result.Arthritis1, Result.Arthritis2, Result.Arthritis3,
                            Result.Arthritis4, Result.Arthritis5, Result.Arthritis6, Result.PR1, Result.PR2,
                            Result.PR3, Result.PR4, Result.PR5, Result.PR6, Result.PR7, Result.CreateTime,
@@ -135,7 +135,7 @@ def search(page=1, page_content_number=10, keywords=None):
 @www_site.route('/result/<username>/<IDNum>/<int:page>', methods=['GET'])
 def search_by_hash_input(username, IDNum, page=1, page_content_number=10):
     input_hash = hash_md5(username+IDNum)
-    ret = db.session.query(Result.saPASI1, Result.saPASI2, Result.saPASI3, Result.saPASI4, Result.saPASI5,
+    ret = db.session.query(Result.Height, Result.Weight, Result.saPASI1, Result.saPASI2, Result.saPASI3, Result.saPASI4, Result.saPASI5,
                            Result.QualityOfLife, Result.Arthritis1, Result.Arthritis2, Result.Arthritis3,
                            Result.Arthritis4, Result.Arthritis5, Result.Arthritis6, Result.PR1, Result.PR2,
                            Result.PR3, Result.PR4, Result.PR5, Result.PR6, Result.PR7, Result.CreateTime,
@@ -161,3 +161,4 @@ def search_by_hash_input(username, IDNum, page=1, page_content_number=10):
                            user_records=user_records,
                            end_page=all_page_num,
                            page_li=page_li)
+

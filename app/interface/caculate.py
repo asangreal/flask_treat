@@ -6,7 +6,7 @@
 # @File    : caculate.py
 # @Software: PyCharm Community Edition
 from hashlib import md5
-from app.models import User, Result
+from app.models import Participator, Result
 from app import db
 from app.interface.advice import Advices
 
@@ -20,7 +20,7 @@ class CaculateRisk(object):
 
     def __init__(self, request_json):
         self.request_json = request_json
-        self.user = User()
+        self.user = Participator()
         self.result = Result()
         self.advice = Advices()
 
@@ -207,7 +207,7 @@ class CaculateRisk(object):
         user_md5 = hash_md5(self.name + self.id_num)
         res = self.check_user_is_in(user_md5)
         if not res:
-            user_info = User(
+            user_info = Participator(
                 wx=self.wx_name,
                 PhoneNum=self.phone_num,
                 IDNum=self.id_num,
@@ -215,8 +215,6 @@ class CaculateRisk(object):
                 NickName=self.nick_name,
                 Sex=self.sex,
                 Birthday=self.birthday,
-                Height=self.height,
-                Weight=self.weight,
                 IncidenceTime=self.incidence_time,
                 HashInput=user_md5
             )
@@ -226,6 +224,8 @@ class CaculateRisk(object):
 
     def info_insert(self, user_md5):
         result = Result(
+            Height=self.height,
+            Weight=self.weight,
             HashInput=user_md5,
             saPASI1=self.sapasi1,
             saPASI2=self.sapasi2,
@@ -252,7 +252,7 @@ class CaculateRisk(object):
         db.session.commit()
 
     def check_user_is_in(self, HashInput):
-        return User.query.filter_by(HashInput=HashInput).all()
+        return Participator.query.filter_by(HashInput=HashInput).all()
 
 
 def hash_md5(val):
@@ -260,7 +260,7 @@ def hash_md5(val):
 
 
 def check_user_is_in(HashInput):
-    return User.query.filter_by(HashInput=HashInput).all()
+    return Participator.query.filter_by(HashInput=HashInput).all()
 
 
 def result_page_getter_fiter(page, page_content_number, hash_input=None, result_query=True):
@@ -274,7 +274,7 @@ def page_getter(page, page_content_number, hash_input=None, result_query=True):
         pagination = Result.query.order_by(Result.CreateTime.desc()).paginate(
             int(page), page_content_number, error_out=False)
     else:
-        pagination = User.query.paginate(page, page_content_number, error_out=False)
+        pagination = Participator.query.paginate(page, page_content_number, error_out=False)
     return pagination
 
 
@@ -282,14 +282,14 @@ def recodes_getter(result_query=True):
     if result_query:
         num = Result.query.count()
     else:
-        num = User.query.count()
+        num = Participator.query.count()
     return num
 
 
 def page_searcher(page, page_content_number, keyword, result_query=True):
     search_query = '%{0}%'.format(keyword)
-    pagination = User.query(User.Name, User.IDNum).\
-        filter_by(User.Name.like(search_query), User.IDNum.like(search_query)).\
+    pagination = Participator.query(Participator.Name, Participator.IDNum).\
+        filter_by(Participator.Name.like(search_query), Participator.IDNum.like(search_query)).\
         order_by(Result.CreateTime.desc()).paginate(
         int(page), page_content_number, error_out=False)
     if result_query:
