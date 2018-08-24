@@ -8,7 +8,7 @@
 from math import ceil
 from . import www_site
 from flask import jsonify, request, render_template
-from app.models import User, Result, db
+from app.models import Participator, Result, db
 from app.interface.caculate import page_getter, recodes_getter, page_searcher, hash_md5
 
 
@@ -73,7 +73,7 @@ def data(page=1, page_content_number=10):
                            Result.QualityOfLife, Result.Arthritis1, Result.Arthritis2, Result.Arthritis3,
                            Result.Arthritis4, Result.Arthritis5, Result.Arthritis6, Result.PR1, Result.PR2,
                            Result.PR3, Result.PR4, Result.PR5, Result.PR6, Result.PR7, Result.CreateTime,
-                           User.Name, User.IDNum, User.IncidenceTime).join(User, User.HashInput == Result.HashInput)
+                           Participator.Name, Participator.IDNum, Participator.IncidenceTime).join(Participator, Participator.HashInput == Result.HashInput)
     value = ret.order_by(Result.CreateTime.desc()).paginate(page, page_content_number, error_out=False)
     return render_template('data.html',
                            user_contents=value,
@@ -102,11 +102,11 @@ def search(page=1, page_content_number=10, keywords=None):
             break
     search_key_words = '%{0}%'.format(search_key_words)
     if is_IDNum:
-        ret = db.session.query(User).filter(User.IDNum.ilike(search_key_words))
-        user_records = db.session.query(User).filter(User.IDNum.ilike(search_key_words)).count()
+        ret = db.session.query(Participator).filter(Participator.IDNum.ilike(search_key_words))
+        user_records = db.session.query(Participator).filter(Participator.IDNum.ilike(search_key_words)).count()
     else:
-        ret = db.session.query(User).filter(User.Name.ilike(search_key_words))
-        user_records = db.session.query(User).filter(User.Name.ilike(search_key_words)).count()
+        ret = db.session.query(Participator).filter(Participator.Name.ilike(search_key_words))
+        user_records = db.session.query(Participator).filter(Participator.Name.ilike(search_key_words)).count()
 
     value = ret.paginate(page, page_content_number, error_out=False)
     all_page_num = int(ceil(user_records / page_content_number))
@@ -139,7 +139,7 @@ def search_by_hash_input(username, IDNum, page=1, page_content_number=10):
                            Result.QualityOfLife, Result.Arthritis1, Result.Arthritis2, Result.Arthritis3,
                            Result.Arthritis4, Result.Arthritis5, Result.Arthritis6, Result.PR1, Result.PR2,
                            Result.PR3, Result.PR4, Result.PR5, Result.PR6, Result.PR7, Result.CreateTime,
-                           User.Name, User.IDNum, User.IncidenceTime).join(User, User.HashInput == Result.HashInput, isouter=True)
+                           Participator.Name, Participator.IDNum, Participator.IncidenceTime).join(Participator, Participator.HashInput == Result.HashInput, isouter=True)
     value = ret.order_by(Result.CreateTime.desc()).filter_by(HashInput=input_hash).paginate(page, page_content_number, error_out=False)
 
     user_records = Result.query.filter_by(HashInput=input_hash).count()
