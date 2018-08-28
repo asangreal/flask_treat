@@ -11,7 +11,7 @@ from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 import app.models
 
-raw = create_app('test')
+raw = create_app('production')
 manager = Manager(raw)
 migrate = Migrate(raw, db)
 
