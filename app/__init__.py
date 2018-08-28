@@ -15,7 +15,7 @@ login_manager = LoginManager()
 # 会话保护等级
 login_manager.session_protection = 'strong'
 # 设置登录页面端点
-login_manager.login_view = 'main.login_in'
+login_manager.login_view = 'www_site.index'
 
 
 def create_app(config_name='production'):
@@ -26,6 +26,7 @@ def create_app(config_name='production'):
     config[config_name].init_app(app)
     # 扩展应用初始化
     db.init_app(app)
+    login_manager.init_app(app)
     #初始化蓝本
     from .interface import interface as interface_blueprint
     app.register_blueprint(interface_blueprint)

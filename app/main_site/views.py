@@ -7,19 +7,70 @@
 # @Software: PyCharm Community Edition
 from math import ceil
 from . import www_site
-from flask import jsonify, request, render_template
-from app.models import Participator, Result, db
+from flask import jsonify, request, render_template, redirect, url_for
+from app.models import Participator, Result, db, User
 from app.interface.caculate import page_getter, recodes_getter, page_searcher, hash_md5
+from flask_login import login_required, current_user, login_user, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
-@www_site.route('/site')
+@www_site.route('/register_in', methods=['POST'])
+def register_in():
+    if request.method == 'POST':
+        counts = User.query.count()
+        if counts > 2:
+            return redirect(url_for('www_site.register'))
+        dict_args = request.form.to_dict()
+        user_name = dict_args['user_name']
+        password = dict_args['password']
+        email = dict_args['email']
+        user = User.query.filter_by(user_name=user_name).first()
+        if user:
+            return redirect(url_for('www_site.register', message='用户已存在'))
+        user = User(user_name=user_name,
+                    email=email,
+                    password_hash=generate_password_hash(password),
+                    user_id=hash_md5(user_name))
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('www_site.index'))
+    return redirect(url_for('www_site.index'))
+
+
+@www_site.route('/register')
+def register():
+    return render_template('register.html')
+
+
+@www_site.route('/')
+@www_site.route('/index')
 def index():
-    return render_template('index.html')
+    return render_template('login.html')
+
+
+@www_site.route('/user_login', methods=['POST'])
+def user_login():
+    if request.method == 'POST':
+        dict_args = request.form.to_dict()
+        user_name = str(dict_args['user_name'])
+        password = dict_args['password']
+        user = User.query.filter_by(user_name=user_name).first()
+        if user is not None and user.verify_password(password):
+            login_user(user)
+            return redirect(url_for('www_site.users'))
+    return redirect(url_for('www_site.index'))
+
+
+@www_site.route('/login_out', methods=['GET'])
+def login_out():
+    logout_user()
+    return redirect(url_for('www_site.index'))
 
 
 @www_site.route('/user', methods=['GET'])
 @www_site.route('/user/<int:page>', methods=['GET'])
 @www_site.route('/user/<int:page>/<int:page_content_number>')
+@login_required
 def users(page=1, page_content_number=10):
     content = page_getter(page, page_content_number, result_query=False)
     # caculate user records...
@@ -51,6 +102,7 @@ def users(page=1, page_content_number=10):
 @www_site.route('/data', methods=['GET'])
 @www_site.route('/data/<int:page>', methods=['GET'])
 @www_site.route('/data/<int:page>/<int:page_content_number>')
+@login_required
 def data(page=1, page_content_number=10):
 
     # caculate user records...
@@ -85,6 +137,7 @@ def data(page=1, page_content_number=10):
 
 @www_site.route('/search/user', methods=['POST'])
 @www_site.route('/search/user/<int:page>/<keywords>')
+@login_required
 def search(page=1, page_content_number=10, keywords=None):
     if request.method == 'POST':
         dict_args = request.form.to_dict()
@@ -133,6 +186,7 @@ def search(page=1, page_content_number=10, keywords=None):
 
 @www_site.route('/result/<username>/<IDNum>', methods=['GET'])
 @www_site.route('/result/<username>/<IDNum>/<int:page>', methods=['GET'])
+@login_required
 def search_by_hash_input(username, IDNum, page=1, page_content_number=10):
     input_hash = hash_md5(username+IDNum)
     ret = db.session.query(Result.Height, Result.Weight, Result.saPASI1, Result.saPASI2, Result.saPASI3, Result.saPASI4, Result.saPASI5,

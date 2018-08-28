@@ -14,11 +14,6 @@ from flask import jsonify, request
 from app.interface.caculate import CaculateRisk, hash_md5, result_page_getter_fiter
 
 
-@interface.route('/')
-def index():
-    return 'this is index...'
-
-
 @interface.route('/Alldata', methods=['POST'])
 def alldata():
     Result = 1

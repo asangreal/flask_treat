@@ -13,7 +13,7 @@ from app import db
 from datetime import datetime
 from hashlib import md5
 from flask_login import UserMixin
-
+from . import login_manager
 # app = Flask(__name__)
 # app.config['SECRET_KEY'] = 'hard to guess'
 # # 这里登陆的是root用户，要填上自己的密码，MySQL的默认端口是3306，填上之前创建的数据库名jianshu,连接方式参考 \
@@ -28,16 +28,10 @@ from flask_login import UserMixin
 class User(UserMixin, db.Model):
 
     __tablename__ = 'user'
-    user_id = db.Column(db.String(20), primary_key=True)
+    user_id = db.Column(db.String(64), primary_key=True)
     user_name = db.Column(db.String(30), unique=True)
-    nickname = db.Column(db.String(40), unique=True)
-    sex = db.Column(db.String(4))
-    age = db.Column(db.Integer)
     password_hash = db.Column(db.String(128))
     email = db.Column(db.String(50), unique=True)
-    last_login_tm = db.Column(db.DateTime)
-    user_crt_dt = db.Column(db.DateTime)
-    attention_cnt = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return '<{},{},{}>'.format(self.user_name, self.email, self.user_id)
@@ -127,6 +121,12 @@ class Result(db.Model):
 
 def hash_md5(val):
     return md5(val.encode('utf-8')).hexdigest()
+
+
+# 加载用户的回调函数
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 
 
 if __name__ == '__main__':
