@@ -199,9 +199,9 @@ class CaculateRisk(object):
             return ''
 
     def caculate(self):
-        self.user_insert()
+        nid = self.user_insert()
         message = list(set(self.advice.message))
-        return self.sapasi5, self.arthritis6, self.risk7, ';'.join(message)
+        return self.sapasi5, self.arthritis6, self.risk7, ';'.join(message), nid
 
     def user_insert(self):
         user_md5 = hash_md5(self.name + self.id_num)
@@ -220,7 +220,8 @@ class CaculateRisk(object):
             )
             db.session.add_all([user_info])
             db.session.commit()
-        self.info_insert(user_md5)
+        nid = self.info_insert(user_md5)
+        return nid
 
     def info_insert(self, user_md5):
         result = Result(
@@ -250,6 +251,7 @@ class CaculateRisk(object):
         )
         db.session.add_all([result])
         db.session.commit()
+        return result.id
 
     def check_user_is_in(self, HashInput):
         return Participator.query.filter_by(HashInput=HashInput).all()
@@ -267,6 +269,11 @@ def result_page_getter_fiter(page, page_content_number, hash_input=None, result_
     pagination = Result.query.filter_by(HashInput=hash_input).order_by(Result.CreateTime.desc()).paginate(
         int(page), page_content_number, error_out=False)
     return pagination
+
+
+def result_set(value, ID_numer):
+    Result.query.filter_by(id=ID_numer).update(dict(message=value))
+    db.session.commit()
 
 
 def page_getter(page, page_content_number, hash_input=None, result_query=True):

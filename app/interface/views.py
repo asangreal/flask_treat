@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/7/18 上午9:19
 # @Author  : Aries
-# @Site    : 
+# @Site    :
 # @File    : views.py
 # @Software: PyCharm Community Edition
 from app.interface import interface
@@ -11,7 +11,7 @@ import time
 import json
 from app.models import User, Result
 from flask import jsonify, request
-from app.interface.caculate import CaculateRisk, hash_md5, result_page_getter_fiter
+from app.interface.caculate import CaculateRisk, hash_md5, result_page_getter_fiter, result_set
 
 
 @interface.route('/Alldata', methods=['POST'])
@@ -21,11 +21,11 @@ def alldata():
     json_return = {}
     try:
         cr = CaculateRisk(request.json)
-        sapsi5, arthritis6, pr7, message = cr.caculate()
+        sapsi5, arthritis6, pr7, message, nid = cr.caculate()
         content = {'saPASI5': int(sapsi5), 'Arthritis6': int(arthritis6), 'PR7': round(pr7, 2) if pr7 else None,
-                   'propose': message}
+                   'propose': message, 'ID': nid}
     except Exception as e:
-        traceback.print_exc()
+        traceback.print_exc(file=open('error.txt', 'a'))
         Result = 2
     if content:
         json_return = content
@@ -54,6 +54,20 @@ def get_history():
             })
         json_return = {'result': 1, 'value': page_val}
     except Exception as e:
-        traceback.print_exc()
+        traceback.print_exc(file=open('error.txt', 'a'))
         json_return = {'result': 2}
     return jsonify(json_return)
+
+
+@interface.route('/sendMessage', methods=['POST'])
+def upload_message():
+    result = 1
+    try:
+        content = request.json
+        ID_num = content['ID']
+        message = content['message']
+        result_set(message, ID_num)
+    except Exception as e:
+        result = 2
+        traceback.print_exc(file=open('error.txt', 'a'))
+    return jsonify({'result': result})

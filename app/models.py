@@ -114,6 +114,7 @@ class Result(db.Model):
     propose = db.Column(db.Text(), nullable=True, default='')
     CreateTime = db.Column(db.DateTime(), default=datetime.now)
     HashInput = db.Column(db.String(32), nullable=False)
+    message = db.Column(db.Text(), default='')
 
     def __repr__(self):
         return "<name %s>" % self.CreateTime
