@@ -198,6 +198,22 @@ class CaculateRisk(object):
         else:
             return ''
 
+    @property
+    def is_diagnosed(self):
+        return self.request_json['IsDiagnosed']
+
+    @property
+    def diagnosed_time(self):
+        return self.request_json['DiagnosedTime']
+
+    @property
+    def is_arthritis(self):
+        return self.request_json['IsArthritis']
+
+    @property
+    def arthritis_time(self):
+        return self.request_json['ArthritisTime']
+
     def caculate(self):
         nid = self.user_insert()
         message = list(set(self.advice.message))
@@ -216,10 +232,25 @@ class CaculateRisk(object):
                 Sex=self.sex,
                 Birthday=self.birthday,
                 IncidenceTime=self.incidence_time,
+                IsDiagnosed=self.is_diagnosed,
+                DiagnosedTime=self.diagnosed_time,
+                IsArthritis=self.is_arthritis,
+                ArthritisTime=self.arthritis_time,
                 HashInput=user_md5
             )
             db.session.add_all([user_info])
             db.session.commit()
+        else:
+            if int(res.IsDiagnosed) != '1':
+
+                if int(self.is_diagnosed) == 1:
+                    dignose_set((self.is_diagnosed, self.diagnosed_time), user_md5)
+
+            if int(res.IsArthritis) != '1':
+
+                if int(self.is_arthritis) == 1:
+                    arthritis_set((self.is_arthritis, self.arthritis_time), user_md5)
+
         nid = self.info_insert(user_md5)
         return nid
 
@@ -265,10 +296,23 @@ def check_user_is_in(HashInput):
     return Participator.query.filter_by(HashInput=HashInput).all()
 
 
+
 def result_page_getter_fiter(page, page_content_number, hash_input=None, result_query=True):
     pagination = Result.query.filter_by(HashInput=hash_input).order_by(Result.CreateTime.desc()).paginate(
         int(page), page_content_number, error_out=False)
     return pagination
+
+
+def dignose_set(update_value, ID_number):
+    Participator.query.filter_by(id=ID_number).update(dict(IsDiagnosed=update_value[0],
+                                                           DiagnosedTime=update_value[1]))
+    db.session.commit()
+
+
+def arthritis_set(update_value, ID_number):
+    Participator.query.filter_by(id=ID_number).update(dict(IsArthritis=update_value[0],
+                                                           ArthritisTime=update_value[1]))
+    db.session.commit()
 
 
 def result_set(value, ID_numer):
