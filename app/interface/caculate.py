@@ -278,7 +278,7 @@ class CaculateRisk(object):
             PR5=self.risk5,
             PR6=self.risk6,
             PR7=self.risk7,
-            propose=';'.join(list(set(self.advice.message)))
+            propose=''.join(list(set(self.advice.message)))
         )
         db.session.add_all([result])
         db.session.commit()
