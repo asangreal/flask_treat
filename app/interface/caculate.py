@@ -244,12 +244,12 @@ class CaculateRisk(object):
             if str(res[0].IsDiagnosed) != '1':
 
                 if int(self.is_diagnosed) == 1:
-                    dignose_set((self.is_diagnosed, self.diagnosed_time), user_md5)
+                    dignose_set((self.is_diagnosed, self.diagnosed_time), res[0].user_id)
 
             if str(res[0].IsArthritis) != '1':
 
                 if int(self.is_arthritis) == 1:
-                    arthritis_set((self.is_arthritis, self.arthritis_time), user_md5)
+                    arthritis_set((self.is_arthritis, self.arthritis_time), res[0].user_id)
 
         nid = self.info_insert(user_md5)
         return nid
@@ -304,13 +304,13 @@ def result_page_getter_fiter(page, page_content_number, hash_input=None, result_
 
 
 def dignose_set(update_value, ID_number):
-    Participator.query.filter_by(id=ID_number).update(dict(IsDiagnosed=update_value[0],
+    Participator.query.filter_by(user_id=ID_number).update(dict(IsDiagnosed=update_value[0],
                                                            DiagnosedTime=update_value[1]))
     db.session.commit()
 
 
 def arthritis_set(update_value, ID_number):
-    Participator.query.filter_by(id=ID_number).update(dict(IsArthritis=update_value[0],
+    Participator.query.filter_by(user_id=ID_number).update(dict(IsArthritis=update_value[0],
                                                            ArthritisTime=update_value[1]))
     db.session.commit()
 
