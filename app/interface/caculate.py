@@ -241,12 +241,12 @@ class CaculateRisk(object):
             db.session.add_all([user_info])
             db.session.commit()
         else:
-            if int(res.IsDiagnosed) != '1':
+            if int(res[0].IsDiagnosed) != '1':
 
                 if int(self.is_diagnosed) == 1:
                     dignose_set((self.is_diagnosed, self.diagnosed_time), user_md5)
 
-            if int(res.IsArthritis) != '1':
+            if int(res[0].IsArthritis) != '1':
 
                 if int(self.is_arthritis) == 1:
                     arthritis_set((self.is_arthritis, self.arthritis_time), user_md5)
