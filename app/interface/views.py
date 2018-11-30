@@ -61,7 +61,10 @@ def get_history():
 
 @interface.route('/sdk/err')
 def err_test():
-    err = {"error": "invaild_redirect"}
+    err = {"token_type": "access_token",
+           "ext_uid": "66a04463962341089d5841b6ac956146",
+           "expires_in": "86400",
+           "access_token": ""}
     return jsonify(err)
 
 
