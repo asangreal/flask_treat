@@ -59,7 +59,7 @@ def get_history():
     return jsonify(json_return)
 
 
-@interface.route('/sdk/err', methods=['POST'])
+@interface.route('/sdk/err')
 def err_test():
     err = {"error": "invaild_redirect"}
     return jsonify(err)
