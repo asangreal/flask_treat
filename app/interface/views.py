@@ -59,6 +59,12 @@ def get_history():
     return jsonify(json_return)
 
 
+@interface.route('/sdk/err', methods=['POST'])
+def err_test():
+    err = {"error": "invaild_redirect"}
+    return jsonify(err)
+
+
 @interface.route('/sendMessage', methods=['POST'])
 def upload_message():
     result = 1
