@@ -71,7 +71,7 @@ class Advices(object):
     def pas_message(self, pas_score):
         if self.is_ari:
             return
-
+        print('pas_score: ' + str(pas_score))
         if 0 < pas_score < 1:
             message = "您未来几年内患关节炎风险不大。"
         elif 1 <= pas_score < 5:
@@ -95,7 +95,6 @@ class Advices(object):
             self.is_ari = True
             message = "您已经患有银屑病性关节炎。请务必重视关节炎的症状。建议您找专业医生进行诊治。"
         else:
-            self.is_ari = False
             message = "您目前没有被专业医师诊断为银屑病性关节炎。"
         self.append_message(message)
 
