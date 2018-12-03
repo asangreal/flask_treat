@@ -247,7 +247,6 @@ class CaculateRisk(object):
 
                 if str(res[0].IsDiagnosed) != '1':
                     dignose_set((self.is_diagnosed, self.diagnosed_time), res[0].user_id)
-            print('is_arthritis:'+str(self.is_arthritis))
             if int(self.is_arthritis) == 1:
 
                 if str(res[0].IsArthritis) != '1':

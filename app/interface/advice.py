@@ -71,7 +71,6 @@ class Advices(object):
     def pas_message(self, pas_score):
         if self.is_ari:
             return
-        print('pas_score: ' + str(pas_score))
         if 0 < pas_score < 1:
             message = "您未来几年内患关节炎风险不大。"
         elif 1 <= pas_score < 5:
