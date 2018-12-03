@@ -253,6 +253,9 @@ class CaculateRisk(object):
                 if int(self.is_arthritis) == 1:
                     arthritis_set((self.is_arthritis, self.arthritis_time), res[0].user_id)
 
+            else:
+                self.advice.set_is_ari()
+
         nid = self.info_insert(user_md5)
         return nid
 

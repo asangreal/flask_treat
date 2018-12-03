@@ -11,7 +11,7 @@ class Advices(object):
 
     def __init__(self):
         self.message = []
-        self.is_diagnosised = False
+        self.is_ari = False
 
     def spasi_message(self, spasi_score):
         message = "您目前的银屑病病情属于"
@@ -46,7 +46,6 @@ class Advices(object):
         self.append_message(message)
 
     def qol_sapasi_message(self, qol_score, spasi_score):
-        print(qol_score)
         self.qol_message(qol_score)
         self.spasi_message(spasi_score)
         qsm = SapasiQolMessage()
@@ -54,7 +53,13 @@ class Advices(object):
         taget(spasi_score)
         self.message = self.message + qsm.message
 
+    def set_is_ari(self):
+        self.is_ari = True
+
     def pest_message(self, pest_score):
+        if self.is_ari:
+            return
+
         if 0 <= pest_score <= 1:
             message = '您目前患银屑病关节炎的可能性较小，请继续注意关节症状。'
         elif pest_score >= 2:
@@ -64,8 +69,11 @@ class Advices(object):
         self.append_message(message)
 
     def pas_message(self, pas_score):
+        if self.is_ari:
+            return
+
         if 0 < pas_score < 1:
-            message = "您目前没有诊断银屑病性关节炎，且您未来8年内患关节炎风险不大。"
+            message = "您未来几年内患关节炎风险不大。"
         elif 1 <= pas_score < 5:
             message = "您未来几年内患银屑病性关节炎患病的风险为: 低风险。"
         elif 5 <= pas_score < 10:
@@ -84,10 +92,10 @@ class Advices(object):
 
     def is_arthritis(self, is_arthritis):
         if is_arthritis == 1:
-            self.isarthritis = True
+            self.is_ari = True
             message = "您已经患有银屑病性关节炎。请务必重视关节炎的症状。建议您找专业医生进行诊治。"
         else:
-            self.isarthritis = False
+            self.is_ari = False
             message = "您目前没有被专业医师诊断为银屑病性关节炎。"
         self.append_message(message)
 
