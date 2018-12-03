@@ -208,7 +208,9 @@ class CaculateRisk(object):
 
     @property
     def is_arthritis(self):
-        return self.request_json['IsArthritis']
+        ret = self.request_json['IsArthritis']
+        self.advice.is_arthritis(self.request_json['IsArthritis'])
+        return ret
 
     @property
     def arthritis_time(self):

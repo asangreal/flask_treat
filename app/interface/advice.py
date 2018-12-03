@@ -15,15 +15,15 @@ class Advices(object):
 
     def spasi_message(self, spasi_score):
         message = "您目前的银屑病病情属于"
-        if spasi_score == 0:
+        if int(spasi_score) == 0:
             message = "您目前没有银屑病皮损。"
-        elif 1 <= spasi_score <= 7:
+        elif 1 <= int(spasi_score) <= 7:
             message = message + "轻度。"
-        elif 8 <= spasi_score <= 14:
+        elif 8 <= int(spasi_score) <= 14:
             message = message + "中度。"
-        elif 15 <= spasi_score <= 30:
+        elif 15 <= int(spasi_score) <= 30:
             message = message + "重度。"
-        elif 31 <= spasi_score <= 72:
+        elif 31 <= int(spasi_score) <= 72:
             message = message + "极重度。"
         else:
             message = ""
@@ -31,30 +31,30 @@ class Advices(object):
 
     def qol_message(self, qol_score):
         message = "您的病情对您%s影响。"
-        if qol_score == 0:
+        if int(qol_score) == 0:
             message = message % '没有'
-        elif qol_score == 1:
+        elif int(qol_score) == 1:
             message = message % '轻微的'
-        elif qol_score == 2:
+        elif int(qol_score) == 2:
             message = message % '相当程度'
-        elif qol_score == 3:
+        elif int(qol_score) == 3:
             message = message % '十分严重'
-        elif qol_score == 4:
+        elif int(qol_score) == 4:
             message = message % '极度严重'
         else:
             message = ''
         self.append_message(message)
 
     def qol_sapasi_message(self, qol_score, spasi_score):
+        print(qol_score)
+        self.qol_message(qol_score)
+        self.spasi_message(spasi_score)
         qsm = SapasiQolMessage()
         taget = getattr(qsm, 'qol_' + str(qol_score), qsm.qol_not_match())
         taget(spasi_score)
         self.message = self.message + qsm.message
 
     def pest_message(self, pest_score):
-        if self.is_diagnosised:
-            return
-
         if 0 <= pest_score <= 1:
             message = '您目前患银屑病关节炎的可能性较小，请继续注意关节症状。'
         elif pest_score >= 2:
@@ -64,9 +64,6 @@ class Advices(object):
         self.append_message(message)
 
     def pas_message(self, pas_score):
-        if self.is_diagnosised:
-            return
-
         if 0 < pas_score < 1:
             message = "您目前没有诊断银屑病性关节炎，且您未来8年内患关节炎风险不大。"
         elif 1 <= pas_score < 5:
@@ -84,9 +81,14 @@ class Advices(object):
     def is_diagnosised(self, is_diagnosised):
         if is_diagnosised == 1:
             self.is_diagnosised = True
-            message = '您已经患有银屑病性关节炎。请务必重视关节炎的症状。建议您找专业医生进行诊治。'
+
+    def is_arthritis(self, is_arthritis):
+        if is_arthritis == 1:
+            self.isarthritis = True
+            message = "您已经患有银屑病性关节炎。请务必重视关节炎的症状。建议您找专业医生进行诊治。"
         else:
-            message = '您目前没有被专业医师诊断为银屑病性关节炎。'
+            self.isarthritis = False
+            message = "您目前没有被专业医师诊断为银屑病性关节炎。"
         self.append_message(message)
 
     def append_message(self, message):
@@ -181,12 +183,3 @@ class SapasiQolMessage(object):
     def qol_not_match(self, sapai_score=0):
         pass
 
-
-if __name__ == '__main__':
-    ac = Advices()
-    ac.pas_message(1)
-    ac.qol_message(3)
-    ac.qol_sapasi_message(3, 5)
-    ac.pest_message(6)
-    ac.pas_message(9)
-    print(ac.message)
