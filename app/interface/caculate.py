@@ -203,9 +203,9 @@ class CaculateRisk(object):
                 Birthday=self.birthday(),
                 IncidenceTime=self.incidence_time(),
                 IsDiagnosed=self.is_diagnosed(),
-                DiagnosedTime=self.diagnosed_time(),
+                DiagnosedTime=self.diagnosed_time() if self.diagnosed_time() else None,
                 IsArthritis=self.is_arthritis(),
-                ArthritisTime=self.arthritis_time(),
+                ArthritisTime=self.arthritis_time() if self.arthritis_time() else None,
                 HashInput=user_md5
             )
             db.session.add_all([user_info])
