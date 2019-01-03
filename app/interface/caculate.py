@@ -314,6 +314,10 @@ def recodes_getter(result_query=True):
     return num
 
 
+def message_getter():
+    num = Result.query.filter(Result.message != '').count()
+    return num
+
 def page_searcher(page, page_content_number, keyword, result_query=True):
     search_query = '%{0}%'.format(keyword)
     pagination = Participator.query(Participator.Name, Participator.IDNum).\

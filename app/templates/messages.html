@@ -1,0 +1,38 @@
+
+{% extends "base.html" %}
+    {% block content %}
+    <div class="container">
+        {% for content in message_contents.items %}
+            <article>
+                <h5>手机号：{{content.PhoneNum}}</h5>
+                <p>{{content.message}}</p>
+            </article>
+            <hr>
+        {% endfor %}
+
+        <ul class="pagination pull-right">
+            <li class="disable"><a><b>{{message_records}}</b>条记录</a></li>
+
+            {% if current_page_number == 1 %}
+                <li class="disabled"><a href="#">&laquo;</a></li>
+            {% else %}
+                <li><a href="/result/message/{{ current_page_number - 1 }}">&laquo;</a></li>
+            {% endif %}
+
+            {% for content in page_li %}
+                {% if content == current_page_number %}
+                    <li class="active"><a href="#">{{content}}</a></li>
+                {% else %}
+                    <li><a href="/result/message/{{content}}">{{content}}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if current_page_number == end_page %}
+                <li class="disabled"><a href="#">&raquo;</a></li>
+            {% else %}
+                <li><a href="/result/message/{{ current_page_number + 1 }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </div>
+{{super()}}
+{% endblock content %}

@@ -9,7 +9,7 @@ from math import ceil
 from . import www_site
 from flask import jsonify, request, render_template, redirect, url_for
 from app.models import Participator, Result, db, User
-from app.interface.caculate import page_getter, recodes_getter, page_searcher, hash_md5
+from app.interface.caculate import page_getter, recodes_getter, page_searcher, hash_md5, message_getter
 from flask_login import login_required, current_user, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -216,3 +216,31 @@ def search_by_hash_input(username, IDNum, page=1, page_content_number=10):
                            end_page=all_page_num,
                            page_li=page_li)
 
+
+@www_site.route('/result/message', methods=['GET'])
+@www_site.route('/result/message/<int:page>', methods=['GET'])
+@login_required
+def messages(page=1, page_content_number=5):
+    ret = db.session.query(Result.message, Participator.Name, Participator.PhoneNum).join(Participator, Participator.HashInput==Result.HashInput, isouter=True)
+    value = ret.order_by(Result.CreateTime.desc()).filter(Result.message != '').paginate(page, page_content_number, error_out=False)
+    num = message_getter()
+    all_page_num = int(ceil(num / page_content_number))
+    page_li = []
+
+    for i in range(1, 3):
+        if page - i > 0:
+            page_li.append(page - i)
+
+        if (page + i) < all_page_num + 1:
+            page_li.append(page + i)
+
+    page_li.append(page)
+    page_li.sort()
+
+    return render_template('messages.html',
+                           flag=2,
+                           message_contents=value,
+                           current_page_number=page,
+                           message_records=num,
+                           end_page=all_page_num,
+                           page_li=page_li)

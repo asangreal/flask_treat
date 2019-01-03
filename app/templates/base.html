@@ -48,9 +48,15 @@
             {% if flag == 1 %}
               <li class="active"><a href="/user">人员统计</a></li>
               <li><a href="/data">结果统计</a></li>
+              <li><a href="/result/message">留言板</a> </li>
+            {% elif flag == 2 %}
+              <li><a href="/user">人员统计</a></li>
+              <li><a href="/data">结果统计</a></li>
+              <li class="active"><a href="/result/message">留言板</a> </li>
             {% else %}
               <li><a href="/user">人员统计</a></li>
               <li class="active"><a href="/data">结果统计</a></li>
+              <li><a href="/result/message">留言板</a> </li>
             {% endif %}
             <!--
               <li><a href="#about">About</a></li>
